@@ -17,8 +17,10 @@ trait BaseUrlTrait
       String serverURL = grailsApplication.config.grails.serverURL
 
       if (!serverURL) {
+         def forwardedProto = request.getHeader("x-forwarded-proto")
+         def protocol = (forwardedProto == null) ? url.protocol : forwardedProto;
 
-         serverURL = "${url.protocol}://${url.host}${url.port?':'+url.port:''}${request.contextPath?:''}"
+         serverURL = "${protocol}://${url.host}${url.port>0?':'+url.port:''}${request.contextPath?:''}"
 
       }
 
